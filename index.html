@@ -624,10 +624,10 @@
 
   <script>
     const CELL = 26;
-    const INITIAL_LIVES = 8;
-    const BOOST_DURATION = 15000;
-    const PLAYER_SPEEDS = [118, 108, 100, 94];
-    const GHOST_SPEEDS = [360, 330, 300, 270];
+    const INITIAL_LIVES = 12;
+    const BOOST_DURATION = 25000;
+    const PLAYER_SPEEDS = [96, 90, 84, 78];
+    const GHOST_SPEEDS = [460, 430, 400, 370];
 
     const LEVELS = [
       {
@@ -636,17 +636,17 @@
         clearMessage: "Pasaste el primer nivel, Geraldine. Así se siente gustarte: un corazón detrás de otro, sin querer detenerme.",
         map: [
           "#############",
-          "#P...#.....G#",
+          "#P.*.#..*..G#",
           "#.##.#.###..#",
-          "#....#...#..#",
+          "#..*.#.*.#..#",
           "#.####.#.#.##",
-          "#......#....#",
+          "#.*..*.*..*.#",
           "###.#####.###",
           "#...#...#...#",
           "#.#.#.#.#.#.#",
           "#.#...#...#.#",
           "#.#####.###.#",
-          "#G....*.....#",
+          "#G.*.*.*..*.#",
           "#############",
         ],
       },
@@ -656,17 +656,17 @@
         clearMessage: "Segundo nivel superado. Me encantas tanto que hasta este laberinto se siente pequeño comparado con todo lo que provocas en mí.",
         map: [
           "#############",
-          "#P..#....#..#",
+          "#P*.#..*.#..#",
           "#.#.#.##.#G.#",
-          "#.#...##....#",
+          "#.#.*.##..*.#",
           "#.###.#######",
-          "#.....#.....#",
+          "#..*.*#.*...#",
           "###.#.#.###.#",
           "#...#...#...#",
           "#.#####.#.#.#",
-          "#.....#.#.#.#",
+          "#.*...#.#.#.#",
           "#.###.#...#.#",
-          "#G..*...#...#",
+          "#G.*.*..#.*.#",
           "#############",
         ],
       },
@@ -676,17 +676,17 @@
         clearMessage: "Tercer nivel superado. Si esto fuera una promesa, sería esta: seguir eligiéndote incluso cuando el camino tenga vueltas raras.",
         map: [
           "#############",
-          "#P....#....G#",
+          "#P.*..#..*.G#",
           "#.###.#.###.#",
-          "#...#.#...#.#",
+          "#.*.#.#.*.#.#",
           "###.#.###.#.#",
-          "#...#.....#.#",
+          "#.*.#..*..#.#",
           "#.#####.###.#",
           "#.#...#.....#",
           "#.#.#.#####.#",
-          "#...#...#...#",
+          "#.*.#.*.#...#",
           "#.#####.#.#.#",
-          "#G....*...#.#",
+          "#G.*.*.*..#.#",
           "#############",
         ],
       },
@@ -696,17 +696,17 @@
         clearMessage: "Último nivel limpio. Ya no quedan fantasmas, solo todo lo bonito que siento cuando tu nombre aparece en mi día.",
         map: [
           "#############",
-          "#P..#...#..G#",
+          "#P*.#.*.#.*G#",
           "#.#.#.#.#.#.#",
-          "#.#...#...#.#",
+          "#.#.*.#.*.#.#",
           "#.###.###.#.#",
-          "#...#.....#.#",
+          "#.*.#..*..#.#",
           "###.#.#####.#",
           "#...#...#...#",
           "#.#####.#.###",
-          "#.....#.#...#",
+          "#.*..#.#.*..#",
           "#.###.#.###.#",
-          "#G..*......##",
+          "#G.*.*.*.*.##",
           "#############",
         ],
       },
@@ -868,7 +868,7 @@
           const wall = cell === '#';
           let content = '';
           if (cell === '.') content = '💗';
-          if (cell === '*') content = '✨';
+          if (cell === '*') content = '⚡';
           html.push(`<div class="tile ${wall ? 'wall' : 'floor'}">${content}</div>`);
         }
       }
@@ -933,11 +933,11 @@
       let html = '';
 
       if (state.status === 'ready') {
-        html = `<div class="message-box message-info">Ahora está súper fácil: muchísimas vidas, fantasmas muy lentos y una chispa larguísima para jugar sin presión. Toca jugar y cambia de dirección con botones, teclado o deslizamiento.</div>`;
+        html = `<div class="message-box message-info">Ahora está ultra fácil: muchísimas vidas, fantasmas lentísimos y muchos truenos ⚡ repartidos por el tablero para ayudarte casi todo el tiempo. Toca jugar y cambia de dirección con botones, teclado o deslizamiento.</div>`;
       }
 
       if (state.status === 'playing') {
-        html = `<div class="message-box message-boost">Chispa activa: ${state.boostMsLeft > 0 ? `${(state.boostMsLeft / 1000).toFixed(1)}s para espantar fantasmas.` : 'todavía no has tomado la chispa especial.'}</div>`;
+        html = `<div class="message-box message-boost">Trueno activo: ${state.boostMsLeft > 0 ? `${(state.boostMsLeft / 1000).toFixed(1)}s de ayuda total para alejar fantasmas.` : 'todavía no has tomado un trueno de ayuda.'}</div>`;
       }
 
       if (state.status === 'levelWon') {
@@ -1148,7 +1148,7 @@
           scored.sort((a, b) => b.distance - a.distance);
           chosen = scored[0].name;
         } else {
-          chosen = Math.random() < 0.22 ? getStepToward(state.grid, ghost, targetPlayer) : options[Math.floor(Math.random() * options.length)];
+          chosen = Math.random() < 0.08 ? getStepToward(state.grid, ghost, targetPlayer) : options[Math.floor(Math.random() * options.length)];
         }
 
         const next = nextPosition(ghost, chosen);
