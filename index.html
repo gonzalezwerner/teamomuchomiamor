@@ -624,10 +624,10 @@
 
   <script>
     const CELL = 26;
-    const INITIAL_LIVES = 3;
-    const BOOST_DURATION = 5200;
-    const PLAYER_SPEEDS = [105, 95, 88, 80];
-    const GHOST_SPEEDS = [165, 150, 138, 126];
+    const INITIAL_LIVES = 4;
+    const BOOST_DURATION = 6800;
+    const PLAYER_SPEEDS = [108, 98, 90, 84];
+    const GHOST_SPEEDS = [205, 188, 172, 158];
 
     const LEVELS = [
       {
@@ -933,7 +933,7 @@
       let html = '';
 
       if (state.status === 'ready') {
-        html = `<div class="message-box message-info">Ahora sí se desliza suave entre casillas. Toca jugar y cambia de dirección con botones, teclado o deslizamiento.</div>`;
+        html = `<div class="message-box message-info">Quedó más equilibrado: sigue siendo reto, pero con más margen para disfrutarlo. Toca jugar y cambia de dirección con botones, teclado o deslizamiento.</div>`;
       }
 
       if (state.status === 'playing') {
@@ -1148,7 +1148,7 @@
           scored.sort((a, b) => b.distance - a.distance);
           chosen = scored[0].name;
         } else {
-          chosen = Math.random() < 0.78 ? getStepToward(state.grid, ghost, targetPlayer) : options[Math.floor(Math.random() * options.length)];
+          chosen = Math.random() < 0.62 ? getStepToward(state.grid, ghost, targetPlayer) : options[Math.floor(Math.random() * options.length)];
         }
 
         const next = nextPosition(ghost, chosen);
