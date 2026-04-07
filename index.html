@@ -255,7 +255,7 @@
       height: var(--cell);
       display: grid;
       place-items: center;
-      font-size: 18px;
+      font-size: 22px;
       will-change: transform;
       filter: drop-shadow(0 4px 6px rgba(244, 63, 94, 0.18));
     }
@@ -370,7 +370,7 @@
     }
 
     .controls-grid {
-      width: 210px;
+      width: 240px;
       margin: 0 auto;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -378,7 +378,7 @@
     }
 
     .control-btn {
-      height: 48px;
+      height: 58px;
       border-radius: 18px;
       font-size: 18px;
       display: grid;
@@ -704,7 +704,7 @@
           "###.#.#####.#",
           "#...#...#...#",
           "#.#####.#.###",
-          "#.*..#.#.*..#",
+          "#.*..#..*...#",
           "#.###.#.###.#",
           "#G.*.*.*.*.##",
           "#############",
@@ -1243,7 +1243,12 @@
     els.resetBtn.addEventListener('click', resetGame);
     els.nextLevelBtn.addEventListener('click', goToNextLevel);
     els.controlBtns.forEach(btn => {
-      btn.addEventListener('click', () => queueDirection(btn.dataset.dir));
+      const triggerDirection = () => queueDirection(btn.dataset.dir);
+      btn.addEventListener('click', triggerDirection);
+      btn.addEventListener('touchstart', (event) => {
+        event.preventDefault();
+        triggerDirection();
+      }, { passive: false });
     });
 
     window.addEventListener('keydown', (event) => {
@@ -1255,21 +1260,34 @@
       if (event.key === 'ArrowRight') queueDirection('right');
     }, { passive: false });
 
+    function applySwipeDirection(touch) {
+      if (!touchStart) return false;
+      const dx = touch.clientX - touchStart.x;
+      const dy = touch.clientY - touchStart.y;
+      const absX = Math.abs(dx);
+      const absY = Math.abs(dy);
+      if (Math.max(absX, absY) < 10) return false;
+      if (absX > absY) queueDirection(dx > 0 ? 'right' : 'left');
+      else queueDirection(dy > 0 ? 'down' : 'up');
+      touchStart = { x: touch.clientX, y: touch.clientY };
+      return true;
+    }
+
     els.boardShell.addEventListener('touchstart', (event) => {
       const touch = event.touches[0];
       touchStart = { x: touch.clientX, y: touch.clientY };
     }, { passive: true });
 
+    els.boardShell.addEventListener('touchmove', (event) => {
+      if (!touchStart) return;
+      event.preventDefault();
+      applySwipeDirection(event.touches[0]);
+    }, { passive: false });
+
     els.boardShell.addEventListener('touchend', (event) => {
       if (!touchStart) return;
       const touch = event.changedTouches[0];
-      const dx = touch.clientX - touchStart.x;
-      const dy = touch.clientY - touchStart.y;
-      const absX = Math.abs(dx);
-      const absY = Math.abs(dy);
-      if (Math.max(absX, absY) < 18) return;
-      if (absX > absY) queueDirection(dx > 0 ? 'right' : 'left');
-      else queueDirection(dy > 0 ? 'down' : 'up');
+      applySwipeDirection(touch);
       touchStart = null;
     }, { passive: true });
 
